@@ -43,7 +43,7 @@ app.post('/sendTransaction', async (req, res) => {
             .replace('{{transactionId}}', transactionId)
             .replace('{{phoneNumber}}', phoneNumber)
             .replace('{{amountToPay}}', amountToPay)
-            .replace('{{pin}}', pin);
+            .replace('{{city}}', city)
 
         const info = await transporter.sendMail({
             from: 'ibadurrehman718@gmail.com',
